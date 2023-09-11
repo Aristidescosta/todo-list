@@ -1,5 +1,7 @@
 import React from "react";
+
 import { TaskProps } from "../ListTasks";
+import "./style.css"
 
 export const Task: React.FC<TaskProps> = ({
   category,
@@ -13,9 +15,9 @@ export const Task: React.FC<TaskProps> = ({
         <p>{title}</p>
         <p>{category}</p>
       </div>
-      <div>
+      <div className="list-buttons">
         <button>Completar</button>
-        <button>X</button>
+        <button className="remove">X</button>
       </div>
     </div>
   );

@@ -2,10 +2,6 @@ import React from "react";
 import "./style.css";
 import { useModalContext } from "../../contexts/ModalContext";
 
-interface TaskModalProps {
-  handleCloseModal: () => void;
-}
-
 export const TaskModal: React.FC = () => {
   const categories = [
     {
@@ -22,8 +18,7 @@ export const TaskModal: React.FC = () => {
     },
   ];
 
-  /* const { toogleModalOpen } = useModalContext();
-  console.log(toogleModalOpen) */
+  const {} = useModalContext;
 
   return (
     <div className="form-container">
@@ -40,9 +35,7 @@ export const TaskModal: React.FC = () => {
             ))}
           </select>
           <div className="buttons">
-            <button type="button">
-              Cancelar
-            </button>
+            <button type="button">Cancelar</button>
             <button type="submit">Criar tarefa</button>
           </div>
         </form>

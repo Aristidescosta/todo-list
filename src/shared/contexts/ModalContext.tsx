@@ -9,11 +9,11 @@ interface IModalContextProps {
   children: React.ReactNode;
 }
 
-const ModalContext = createContext({} as IModalContextData);
-
 export const useModalContext = () => {
   useContext(ModalContext);
 };
+
+const ModalContext = createContext({} as IModalContextData);
 
 export const ModalProvider: React.FC<IModalContextProps> = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);

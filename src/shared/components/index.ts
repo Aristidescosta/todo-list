@@ -1,0 +1,5 @@
+export * from "./ListTasks/index"
+export * from "./TaskModal/index"
+export * from "./ButtonAdd/index"
+export * from "./Header/index"
+export * from "./Task/index"

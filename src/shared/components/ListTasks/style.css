@@ -1,0 +1,19 @@
+.list-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  flex-direction: column;
+}
+
+.list{
+  width: 70vw;
+  background-color: #efefefef;
+  margin: 0 auto 300px;
+  padding: 20px 30px;
+  border-radius: 10px;
+}
+
+p{
+  margin: 10px 0;
+}

@@ -10,6 +10,7 @@
   height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
+  /* display: none; */
 }
 
 .form-content {
@@ -19,10 +20,11 @@
   flex-direction: column;
   background-color: #fff;
   padding: 20px;
+  border-radius: 8px;
 }
 
-.form-content input,
-.form-content select {
+input,
+select {
   width: 100%;
   padding: 15px;
   border: 1px solid #ddd;
@@ -33,7 +35,8 @@
   outline: none;
 }
 
-.form-content select option {
+.form-content select,
+option {
   cursor: pointer;
 }
 
@@ -56,4 +59,8 @@ button {
 
 .form-content button:hover {
   opacity: 1;
+}
+
+.select {
+  width: 28vw;
 }

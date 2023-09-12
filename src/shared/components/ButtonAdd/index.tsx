@@ -1,8 +1,13 @@
-import { useModalContext } from "../../contexts/ModalContext";
 import "./style.css";
 
-export const ButtonAdd = () => {
-  
+interface IButtonAddProps {
+  handleOpenModal: () => void;
+}
 
-  return <button className="button">+</button>;
+export const ButtonAdd: React.FC<IButtonAddProps> = ({ handleOpenModal }) => {
+  return (
+    <button className="button" onClick={handleOpenModal}>
+      +
+    </button>
+  );
 };

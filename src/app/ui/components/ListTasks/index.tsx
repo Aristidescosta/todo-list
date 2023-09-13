@@ -1,6 +1,6 @@
 import { Search, Task } from "..";
-import { TaskProps } from "../../types";
-import { filters } from "../../utils";
+import { TaskProps } from "../../../models/types";
+import { filters } from "../../../utils";
 import "./style.css";
 import { useState } from "react";
 
@@ -66,8 +66,7 @@ export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
               handleDeleteTask={() => handleDeleteTask(task.id)}
               handleCompleteTask={() => handleCompleteTask(task.id)}
             />
-          ))
-        }
+          ))}
       </div>
     </div>
   );

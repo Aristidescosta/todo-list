@@ -1,6 +1,6 @@
-import hamburguerIcon from "../../../assets/bell-icon.png";
-import bellIcon from "../../../assets/hamburguer-button.png";
-import avatar from "../../../assets/avatar.webp";
+import hamburguerIcon from "../../../../assets/bell-icon.png";
+import bellIcon from "../../../../assets/hamburguer-button.png";
+import avatar from "../../../../assets/avatar.webp";
 
 import "./style.css";
 

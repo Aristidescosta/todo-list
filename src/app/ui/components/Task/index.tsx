@@ -1,6 +1,6 @@
 import React from "react";
 
-import { TaskProps } from "../../types";
+import { TaskProps } from "../../../models/types";
 import "./style.css";
 
 type TaskData = TaskProps & {

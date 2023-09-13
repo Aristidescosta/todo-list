@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { Header } from "./shared/components/Header";
-import { ListTasks } from "./shared/components/ListTasks";
-import { ButtonAdd, Preloader, TaskModal } from "./shared/components";
-import { TaskProps } from "./shared/types";
+import { TaskProps } from "./app/models/types";
 
 import oopsImg from "./assets/oops.png";
 import "./App.css";
+import {
+  ButtonAdd,
+  Header,
+  ListTasks,
+  Preloader,
+  TaskModal,
+} from "./app/ui/components";
 
 export const App = () => {
   const [tasks, setTasks] = useState<TaskProps[]>([]);
@@ -23,10 +27,6 @@ export const App = () => {
         setTimeout(() => {
           const loadedTasks = localStorage.getItem("tasks-toDoList");
           if (loadedTasks) setTasks(JSON.parse(loadedTasks));
-          /* if (loadedTasks !== null) {
-            console.log(tasks);
-            setTasks([...tasks, JSON.parse(loadedTasks)]);
-          } */
           resolve("");
         }, 1000);
       });

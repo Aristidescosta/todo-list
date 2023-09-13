@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from "react";
+
+import { TaskProps } from "../../../models/types";
+import { categories } from "../../../utils";
 import "./style.css";
-import { categories } from "../../utils";
-import { TaskProps } from "../../types";
 
 interface TaskModal {
   tasks: TaskProps[];

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import oopsImg from "./assets/oops.png";
+import oopsImg from "../../../../assets/oops.png";
 import { TaskProps } from "../../../models/types";
 import {
   ButtonAdd,

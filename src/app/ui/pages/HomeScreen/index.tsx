@@ -9,6 +9,7 @@ import {
   Preloader,
   TaskModal,
 } from "../../components";
+import { TASK_REPOSITORY } from "../../../repository/TasksRepository";
 
 export const HomeScreen = () => {
   const [tasks, setTasks] = useState<ITaskProps[]>([]);
@@ -23,9 +24,13 @@ export const HomeScreen = () => {
     setIsLoading(true);
     async function loadTasks() {
       await new Promise((resolve) => {
-        setTimeout(() => {
-          const loadedTasks = localStorage.getItem("tasks-toDoList");
-          if (loadedTasks) setTasks(JSON.parse(loadedTasks));
+        setTimeout(async () => {
+          const LOADED_TASKS = await TASK_REPOSITORY.getAllTasks();
+          if (LOADED_TASKS instanceof Error) {
+            alert(LOADED_TASKS.message);
+            return;
+          }
+          setTasks(LOADED_TASKS);
           resolve("");
         }, 1000);
       });

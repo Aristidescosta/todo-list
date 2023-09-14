@@ -1,10 +1,10 @@
 import { useState } from "react";
 
 import { ITaskProps } from "../../../models/types";
-import { TASKS_DAO } from "../../../dao/TasksDAO";
 import { filters } from "../../../utils";
 import { Search, Task } from "..";
 import "./style.css";
+import { TASK_REPOSITORY } from "../../../repository/TasksRepository";
 
 interface ListHeaderProps {
   tasks: ITaskProps[];
@@ -16,12 +16,12 @@ export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
   const [filter, setFilter] = useState("all");
 
   const handleDeleteTask = (taskId: number) => {
-    TASKS_DAO.getTaksById(tasks, taskId).then((response) => {
+    TASK_REPOSITORY.getTaksById(tasks, taskId).then((response) => {
       if (response instanceof Array) {
         if (
           confirm(`${response[0].title}\nDeseja realmente apagar esta tarefa?`)
         )
-          TASKS_DAO.deleteTask(tasks, response).then((responseDelete) => {
+          TASK_REPOSITORY.deleteTask(tasks, response).then((responseDelete) => {
             if (responseDelete instanceof Error) {
               alert(responseDelete);
               return;
@@ -33,7 +33,7 @@ export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
   };
 
   const handleCompleteTask = (taskId: number) => {
-    TASKS_DAO.completeTask(taskId, tasks).then((response) => {
+    TASK_REPOSITORY.completeTask(taskId, tasks).then((response) => {
       if (response instanceof Array) setTasks(response);
       else alert(response.message);
     });

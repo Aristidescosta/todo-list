@@ -2,8 +2,8 @@ import React, { useCallback, useState } from "react";
 
 import { categories } from "../../../utils";
 import "./style.css";
-import { TASKS_DAO } from "../../../dao/TasksDAO";
 import { ITaskProps } from "../../../models/types";
+import { TASK_REPOSITORY } from "../../../repository/TasksRepository";
 
 interface TaskModal {
   tasks: ITaskProps[];
@@ -27,7 +27,7 @@ export const TaskModal: React.FC<TaskModal> = ({
         category: category,
         isCompleted: false,
       };
-      TASKS_DAO.saveTask(tasks, newTask)
+      TASK_REPOSITORY.createTask(tasks, newTask)
         .then((response) => {
           setTasks([...tasks, newTask]);
           alert(response);

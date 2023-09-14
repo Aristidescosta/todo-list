@@ -1,8 +1,10 @@
-import { Search, Task } from "..";
-import { ITaskProps } from "../../../models/types";
-import { filters } from "../../../utils";
-import "./style.css";
 import { useState } from "react";
+
+import { ITaskProps } from "../../../models/types";
+import { TASKS_DAO } from "../../../dao/TasksDAO";
+import { filters } from "../../../utils";
+import { Search, Task } from "..";
+import "./style.css";
 
 interface ListHeaderProps {
   tasks: ITaskProps[];
@@ -12,15 +14,22 @@ interface ListHeaderProps {
 export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
-  console.log(filter);
 
   const handleDeleteTask = (taskId: number) => {
-    const newTasks = [...tasks];
-    const filterdeTask = newTasks.filter((task) =>
-      task.id !== taskId ? task : null
-    );
-    localStorage.setItem("tasks-toDoList", JSON.stringify(filterdeTask));
-    setTasks(filterdeTask);
+    TASKS_DAO.getTaksById(tasks, taskId).then((response) => {
+      if (response instanceof Array) {
+        if (
+          confirm(`${response[0].title}\nDeseja realmente apagar esta tarefa?`)
+        )
+          TASKS_DAO.deleteTask(tasks, response).then((responseDelete) => {
+            if (responseDelete instanceof Error) {
+              alert(responseDelete);
+              return;
+            }
+            setTasks(responseDelete);
+          });
+      }
+    });
   };
 
   const handleCompleteTask = (taskId: number) => {

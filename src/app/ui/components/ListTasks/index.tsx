@@ -33,12 +33,10 @@ export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
   };
 
   const handleCompleteTask = (taskId: number) => {
-    const newTask = [...tasks];
-    newTask.map((task) =>
-      task.id === taskId ? (task.isCompleted = !task.isCompleted) : task
-    );
-    localStorage.setItem("tasks-toDoList", JSON.stringify(newTask));
-    setTasks(newTask);
+    TASKS_DAO.completeTask(taskId, tasks).then((response) => {
+      if (response instanceof Array) setTasks(response);
+      else alert(response.message);
+    });
   };
 
   return (

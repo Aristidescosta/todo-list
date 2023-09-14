@@ -4,31 +4,20 @@ import { ITaskProps } from "../../../models/types";
 import { filters } from "../../../utils";
 import { Search, Task } from "..";
 import "./style.css";
-import { TASK_REPOSITORY } from "../../../repository/TasksRepository";
 
 interface ListHeaderProps {
   tasks: ITaskProps[];
-  setTasks: (oldTasks: ITaskProps[]) => void;
+  handleDeleteTask: (taskId: string) => void;
+  handleCompleteTask: (taskId: string) => void;
 }
 
-export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
+export const ListTasks: React.FC<ListHeaderProps> = ({
+  tasks,
+  handleDeleteTask,
+  handleCompleteTask,
+}) => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
-
-  const handleDeleteTask = (taskId: string) => {
-    if (confirm(`Deseja realmente apagar esta tarefa?`))
-      TASK_REPOSITORY.deleteTask(taskId).then((responseDelete) => {
-        /* 
-        setTasks(responseDelete); */
-      });
-  };
-
-  const handleCompleteTask = (taskId: number) => {
-    TASK_REPOSITORY.completeTask(taskId, tasks).then((response) => {
-      if (response instanceof Array) setTasks(response);
-      else alert(response.message);
-    });
-  };
 
   return (
     <div className="list-container">
@@ -62,7 +51,9 @@ export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
               isCompleted={task.isCompleted}
               title={task.title}
               handleDeleteTask={() => handleDeleteTask(task.docId as string)}
-              handleCompleteTask={() => handleCompleteTask(task.id)}
+              handleCompleteTask={() =>
+                handleCompleteTask(task.docId as string)
+              }
             />
           ))}
       </div>

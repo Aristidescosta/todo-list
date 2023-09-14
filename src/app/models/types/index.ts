@@ -1,7 +1,7 @@
 export interface ITaskProps {
   title: string;
   category: string;
-  id: number;
+  id: string;
   isCompleted: boolean;
   docId?: string
 }

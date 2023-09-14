@@ -11,13 +11,12 @@ import TasksDAO from "./TasksDAO";
 import { DB } from "../../firebase/firebaseConfig";
 
 export default class TasksDAODatabase implements TasksDAO {
-  async update(tasks: ITaskProps, id: number): Promise<void> {
-    const TASK_REF = doc(DB, "tasks", `${id}`);
-    await updateDoc(TASK_REF, { tasks });
+  async complete(tasks: ITaskProps, id: string): Promise<void> {
+    await updateDoc(doc(DB, "tasks", id), { ...tasks, isCompleted: !tasks.isCompleted});
   }
 
   async save(tasks: ITaskProps): Promise<void> {
-    await addDoc(collection(DB, "task "), {
+    await addDoc(collection(DB, "tasks"), {
       title: tasks.title,
       isCompleted: false,
       category: tasks.category,
@@ -30,11 +29,9 @@ export default class TasksDAODatabase implements TasksDAO {
     const TASKS_SNAPSHOT = await getDocs(tasksCol);
     const DATA_ARRAY: ITaskProps[] = [];
     TASKS_SNAPSHOT.docs.map((doc) => {
-      const VALUE = 
-      {
+      const VALUE = {
         docId: doc.id,
-        ... doc.data()
-
+        ...doc.data(),
       } as ITaskProps;
       DATA_ARRAY.push(VALUE);
     });

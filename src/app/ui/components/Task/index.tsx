@@ -10,7 +10,6 @@ type TaskData = ITaskProps & {
 
 export const Task: React.FC<TaskData> = ({
   category,
-  id,
   isCompleted = false,
   title,
   handleDeleteTask,

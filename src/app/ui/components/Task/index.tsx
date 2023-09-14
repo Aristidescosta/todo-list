@@ -1,9 +1,9 @@
 import React from "react";
 
-import { TaskProps } from "../../../models/types";
+import { ITaskProps } from "../../../models/types";
 import "./style.css";
 
-type TaskData = TaskProps & {
+type TaskData = ITaskProps & {
   handleDeleteTask: () => void;
   handleCompleteTask: () => void;
 };

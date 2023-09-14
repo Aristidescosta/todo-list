@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { TaskProps } from "../../../models/types";
+import { ITaskProps } from "../../../models/types";
 import { Oops } from "../../components/Oops";
 import {
   ButtonAdd,
@@ -11,7 +11,7 @@ import {
 } from "../../components";
 
 export const HomeScreen = () => {
-  const [tasks, setTasks] = useState<TaskProps[]>([]);
+  const [tasks, setTasks] = useState<ITaskProps[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 

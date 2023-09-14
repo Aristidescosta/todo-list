@@ -1,12 +1,12 @@
 import { Search, Task } from "..";
-import { TaskProps } from "../../../models/types";
+import { ITaskProps } from "../../../models/types";
 import { filters } from "../../../utils";
 import "./style.css";
 import { useState } from "react";
 
 interface ListHeaderProps {
-  tasks: TaskProps[];
-  setTasks: (oldTasks: TaskProps[]) => void;
+  tasks: ITaskProps[];
+  setTasks: (oldTasks: ITaskProps[]) => void;
 }
 
 export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {

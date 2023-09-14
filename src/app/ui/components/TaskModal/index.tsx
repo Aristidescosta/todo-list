@@ -1,12 +1,13 @@
 import React, { useCallback, useState } from "react";
 
-import { TaskProps } from "../../../models/types";
 import { categories } from "../../../utils";
 import "./style.css";
+import { TASKS_DAO } from "../../../dao/TasksDAO";
+import { ITaskProps } from "../../../models/types";
 
 interface TaskModal {
-  tasks: TaskProps[];
-  setTasks: (oldTasks: TaskProps[]) => void;
+  tasks: ITaskProps[];
+  setTasks: (oldTasks: ITaskProps[]) => void;
   handleOpenModal: () => void;
 }
 
@@ -26,11 +27,12 @@ export const TaskModal: React.FC<TaskModal> = ({
         category: category,
         isCompleted: false,
       };
-      localStorage.setItem(
-        "tasks-toDoList",
-        JSON.stringify([...tasks, newTask])
-      );
-      setTasks([...tasks, newTask]);
+      TASKS_DAO.saveTask(tasks, newTask)
+        .then((response) => {
+          setTasks([...tasks, newTask]);
+          alert(response);
+        })
+        .catch((response) => alert(response));
     },
     [tasks]
   );

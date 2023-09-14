@@ -1,9 +1,11 @@
 import { ITaskProps } from "../models/types";
 
 export default interface TasksDAO {
-  save(tasks: ITaskProps[], task: ITaskProps): Promise<void>;
+  save(tasks: ITaskProps): Promise<void>;
 
-  getAll(): Promise<string | null>;
+  getAll(): Promise<ITaskProps[]>;
 
-  delete(tasks: ITaskProps[]): Promise<void>;
+  delete(taskID: string): Promise<void>;
+
+  update(tasks: ITaskProps, id: number): Promise<void>
 }

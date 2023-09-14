@@ -15,21 +15,12 @@ export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
 
-  const handleDeleteTask = (taskId: number) => {
-    TASK_REPOSITORY.getTaksById(tasks, taskId).then((response) => {
-      if (response instanceof Array) {
-        if (
-          confirm(`${response[0].title}\nDeseja realmente apagar esta tarefa?`)
-        )
-          TASK_REPOSITORY.deleteTask(tasks, response).then((responseDelete) => {
-            if (responseDelete instanceof Error) {
-              alert(responseDelete);
-              return;
-            }
-            setTasks(responseDelete);
-          });
-      }
-    });
+  const handleDeleteTask = (taskId: string) => {
+    if (confirm(`Deseja realmente apagar esta tarefa?`))
+      TASK_REPOSITORY.deleteTask(taskId).then((responseDelete) => {
+        /* 
+        setTasks(responseDelete); */
+      });
   };
 
   const handleCompleteTask = (taskId: number) => {
@@ -70,7 +61,7 @@ export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
               id={task.id}
               isCompleted={task.isCompleted}
               title={task.title}
-              handleDeleteTask={() => handleDeleteTask(task.id)}
+              handleDeleteTask={() => handleDeleteTask(task.docId as string)}
               handleCompleteTask={() => handleCompleteTask(task.id)}
             />
           ))}

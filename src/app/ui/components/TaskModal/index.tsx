@@ -27,7 +27,7 @@ export const TaskModal: React.FC<TaskModal> = ({
         category: category,
         isCompleted: false,
       };
-      TASK_REPOSITORY.createTask(tasks, newTask)
+      TASK_REPOSITORY.createTask(newTask)
         .then((response) => {
           setTasks([...tasks, newTask]);
           alert(response);

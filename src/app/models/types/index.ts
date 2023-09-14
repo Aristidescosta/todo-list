@@ -3,6 +3,7 @@ export interface ITaskProps {
   category: string;
   id: number;
   isCompleted: boolean;
+  docId?: string
 }
 
 export type FilterProps = "all" | "completed" | "incomplete";
@@ -17,4 +18,7 @@ export interface ITaskSave {
   tasks: ITaskProps[];
 }
 
+export declare interface DocumentData{}
+
 export type TDeleteTask = Omit<TTaskCreate, "tasks">;
+

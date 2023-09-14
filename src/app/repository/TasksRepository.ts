@@ -18,14 +18,14 @@ async function getAllTasks(): Promise<ITaskProps[]> {
 
 async function deleteTask(taskId: string): Promise<void> {
   try {
-    TASKS_DAO.delete(taskId);
+    await TASKS_DAO.delete(taskId);
   } catch (error) {
     console.error(error);
   }
 }
 
-async function completeTask(taskId: string, task: ITaskProps): Promise<void> {
-  await TASKS_DAO.complete(task, taskId)
+async function completeTask(task: ITaskProps): Promise<void> {
+  await TASKS_DAO.complete(task, task.docId as string)
     .then((response) => console.log(response))
     .catch((error) => console.log("Erro: " + error));
 }

@@ -1,42 +1,48 @@
 import React, { useState } from "react";
 
 import { categories } from "../../../utils";
-import "./style.css";
+import { ITaskProps } from "../../../models/types";
 
 interface TaskModal {
-  handleOpenModal: () => void;
-  handleAddTask: (title: string, category: string) => void;
+  handleCloseModal: () => void;
+  handleUpdateTask: (title: string, category: string) => void;
+  task: ITaskProps;
 }
 
-export const TaskModal: React.FC<TaskModal> = ({
-  handleOpenModal,
-  handleAddTask,
+export const TaskModalEdit: React.FC<TaskModal> = ({
+  handleCloseModal,
+  task,
+  handleUpdateTask,
 }) => {
   const [value, setValue] = useState("");
   const [category, setCategory] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(value, category)
     if (!value || !category) return;
-    handleAddTask(value, category);
+    handleUpdateTask(value, category);
     setCategory("");
     setValue("");
-    handleOpenModal();
+    handleCloseModal();
   };
 
   return (
     <div className="form-container">
       <div className="form-content">
-        <h1>Criar nova Tarefa</h1>
+        <h1>Editar tarefa</h1>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
             placeholder="Digite o título da tarefa"
             onChange={(e) => setValue(e.target.value)}
-            value={value}
+            defaultValue={task.title}
           />
           <div className="select">
-            <select onChange={(e) => setCategory(e.target.value)}>
+            <select
+              defaultValue={task.category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
               <option value={category}>Selecione uma categoria</option>
               {categories.map((item) => (
                 <option key={item.id} value={item.title}>
@@ -46,10 +52,10 @@ export const TaskModal: React.FC<TaskModal> = ({
             </select>
           </div>
           <div className="buttons">
-            <button type="button" onClick={handleOpenModal}>
+            <button type="button" onClick={handleCloseModal}>
               Cancelar
             </button>
-            <button type="submit">Criar tarefa</button>
+            <button type="submit">Atualiar</button>
           </div>
         </form>
       </div>

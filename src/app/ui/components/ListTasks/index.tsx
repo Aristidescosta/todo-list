@@ -4,40 +4,22 @@ import { ITaskProps } from "../../../models/types";
 import { filters } from "../../../utils";
 import { Search, Task } from "..";
 import "./style.css";
-import { TASK_REPOSITORY } from "../../../repository/TasksRepository";
 
 interface ListHeaderProps {
   tasks: ITaskProps[];
-  setTasks: (oldTasks: ITaskProps[]) => void;
+  handleDeleteTask: (taskId: string) => void;
+  handleCompleteTask: (taskId: string) => void;
+  handleEditTask: (taskId: string) => void;
 }
 
-export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
+export const ListTasks: React.FC<ListHeaderProps> = ({
+  tasks,
+  handleDeleteTask,
+  handleCompleteTask,
+  handleEditTask,
+}) => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
-
-  const handleDeleteTask = (taskId: number) => {
-    TASK_REPOSITORY.getTaksById(tasks, taskId).then((response) => {
-      if (response instanceof Array) {
-        if (
-          confirm(`${response[0].title}\nDeseja realmente apagar esta tarefa?`)
-        )
-          TASK_REPOSITORY.deleteTask(tasks, response).then((responseDelete) => {
-            if (responseDelete instanceof Error) {
-              alert(responseDelete);
-              return;
-            }
-            setTasks(responseDelete);
-          });
-      }
-    });
-  };
-
-  const handleCompleteTask = (taskId: number) => {
-    TASK_REPOSITORY.completeTask(taskId, tasks).then((response) => {
-      if (response instanceof Array) setTasks(response);
-      else alert(response.message);
-    });
-  };
 
   return (
     <div className="list-container">
@@ -70,8 +52,11 @@ export const ListTasks: React.FC<ListHeaderProps> = ({ tasks, setTasks }) => {
               id={task.id}
               isCompleted={task.isCompleted}
               title={task.title}
-              handleDeleteTask={() => handleDeleteTask(task.id)}
-              handleCompleteTask={() => handleCompleteTask(task.id)}
+              handleDeleteTask={() => handleDeleteTask(task.docId as string)}
+              handleCompleteTask={() =>
+                handleCompleteTask(task.docId as string)
+              }
+              handleEditTask={() => handleEditTask(task.docId as string)}
             />
           ))}
       </div>

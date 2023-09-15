@@ -9,12 +9,14 @@ interface ListHeaderProps {
   tasks: ITaskProps[];
   handleDeleteTask: (taskId: string) => void;
   handleCompleteTask: (taskId: string) => void;
+  handleEditTask: (taskId: string) => void;
 }
 
 export const ListTasks: React.FC<ListHeaderProps> = ({
   tasks,
   handleDeleteTask,
   handleCompleteTask,
+  handleEditTask,
 }) => {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
@@ -54,6 +56,7 @@ export const ListTasks: React.FC<ListHeaderProps> = ({
               handleCompleteTask={() =>
                 handleCompleteTask(task.docId as string)
               }
+              handleEditTask={() => handleEditTask(task.docId as string)}
             />
           ))}
       </div>

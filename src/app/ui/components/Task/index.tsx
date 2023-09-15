@@ -6,6 +6,7 @@ import "./style.css";
 type TaskData = ITaskProps & {
   handleDeleteTask: () => void;
   handleCompleteTask: () => void;
+  handleEditTask: () => void;
 };
 
 export const Task: React.FC<TaskData> = ({
@@ -14,6 +15,7 @@ export const Task: React.FC<TaskData> = ({
   title,
   handleDeleteTask,
   handleCompleteTask,
+  handleEditTask,
 }) => {
   return (
     <div className="list-task">
@@ -30,6 +32,7 @@ export const Task: React.FC<TaskData> = ({
         <button onClick={handleCompleteTask}>
           {isCompleted ? "Recomeçar" : "Completar"}
         </button>
+        <button onClick={handleEditTask}>Editar</button>
         <button className="remove" onClick={handleDeleteTask}>
           X
         </button>

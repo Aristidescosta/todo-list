@@ -30,9 +30,16 @@ async function completeTask(task: ITaskProps): Promise<void> {
     .catch((error) => console.log("Erro: " + error));
 }
 
+async function updateTask(task: ITaskProps): Promise<void> {
+  await TASKS_DAO.update(task)
+    .then((response) => console.log(response))
+    .catch((error) => console.log("Erro: " + error));
+}
+
 export const TASK_REPOSITORY = {
   createTask,
   getAllTasks,
   deleteTask,
   completeTask,
+  updateTask
 };

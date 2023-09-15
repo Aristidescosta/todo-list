@@ -18,6 +18,14 @@ export default class TasksDAODatabase implements TasksDAO {
     });
   }
 
+  async update(tasks: ITaskProps): Promise<void> {
+    await updateDoc(doc(DB, "tasks", tasks.docId as string), {
+      ...tasks,
+      category: tasks.category,
+      title: tasks.title,
+    });
+  }
+
   async save(tasks: ITaskProps): Promise<void> {
     await addDoc(collection(DB, "tasks"), {
       title: tasks.title,

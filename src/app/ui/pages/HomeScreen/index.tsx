@@ -111,10 +111,11 @@ export const HomeScreen = () => {
       category: category,
       isCompleted: false,
     };
-    TASK_REPOSITORY.createTask(newTask);
-    TASK_REPOSITORY.getAllTasks()
-      .then((respnse) => setTasks(respnse))
-      .catch((error) => alert(error));
+    TASK_REPOSITORY.createTask(newTask).then(async () => {
+      TASK_REPOSITORY.getAllTasks()
+        .then((respnse) => setTasks(respnse))
+        .catch((error) => alert(error));
+    });
   }, []);
 
   return (

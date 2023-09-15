@@ -1,5 +1,5 @@
 import TasksDAODatabase from "../dao/TasksDAODatabase";
-import { ITaskProps } from "../models/types";
+import { IAuth, ITaskProps } from "../models/types";
 
 const TASKS_DAO = new TasksDAODatabase();
 
@@ -36,10 +36,51 @@ async function updateTask(task: ITaskProps): Promise<void> {
     .catch((error) => console.log("Erro: " + error));
 }
 
+async function login(email: string, password: string): Promise<IAuth | Error> {
+  try {
+    const ACCESS_TOKEN = await TASKS_DAO.auth({ email, password });
+    if (ACCESS_TOKEN instanceof Error) {
+      return new Error("Email ou senha incorreta");
+    }
+    return ACCESS_TOKEN;
+  } catch (error) {
+    const ERROR = (error as { message: string }).message;
+    if (ERROR.includes("auth/email-already-in-use"))
+      return new Error("Usuário já cadastrado");
+
+    if (ERROR.includes("auth/weak-password"))
+      return new Error("A senha deve ter pelo menos 6 caracteres");
+
+    return new Error(ERROR || "Houve um erro interno");
+  }
+}
+
+async function sigIn(email: string, password: string): Promise<IAuth | Error> {
+  try {
+    const ACCESS_TOKEN = await TASKS_DAO.signIn({ email, password });
+    if (ACCESS_TOKEN instanceof Error) return new Error("Erro");
+    return ACCESS_TOKEN;
+  } catch (error) {
+    const ERROR = (error as { message: string }).message;
+    if (ERROR.includes("auth/invalid-login-credentials"))
+      return new Error("Email ou senha incorreta");
+    return new Error(ERROR || "Houve um erro interno");
+  }
+}
+
+async function logout(): Promise<Error | void> {
+  await TASKS_DAO.logout().catch(() => {
+    return new Error("Houve um erro interno");
+  });
+}
+
 export const TASK_REPOSITORY = {
   createTask,
   getAllTasks,
   deleteTask,
   completeTask,
-  updateTask
+  updateTask,
+  login,
+  logout,
+  sigIn,
 };

@@ -6,11 +6,49 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore/lite";
-import { ITaskProps } from "../models/types";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { IAuth, ITaskProps, IUser } from "../models/types";
 import TasksDAO from "./TasksDAO";
 import { DB } from "../../firebase/firebaseConfig";
 
 export default class TasksDAODatabase implements TasksDAO {
+  async auth(user: IUser): Promise<IAuth> {
+    const AUTH = getAuth();
+    const USER = await createUserWithEmailAndPassword(
+      AUTH,
+      user.email,
+      user.password
+    );
+    console.log("Erro");
+    const IUSER = {
+      accessToken: USER.user.uid,
+    };
+    return IUSER;
+  }
+  async logout(): Promise<void> {
+    const AUTH = getAuth();
+    await signOut(AUTH);
+  }
+
+  async signIn(user: IUser): Promise<IAuth> {
+    const AUTH = getAuth();
+    const USER = await signInWithEmailAndPassword(
+      AUTH,
+      user.email,
+      user.password
+    );
+    console.log("Erro");
+    const IUSER = {
+      accessToken: USER.user.uid,
+    };
+    return IUSER;
+  }
+
   async complete(tasks: ITaskProps): Promise<void> {
     await updateDoc(doc(DB, "tasks", tasks.docId as string), {
       ...tasks,

@@ -1,4 +1,4 @@
-import { ITaskProps } from "../models/types";
+import { IAuth, ITaskProps, IUser, } from "../models/types";
 
 export default interface TasksDAO {
   save(tasks: ITaskProps): Promise<void>;
@@ -10,4 +10,10 @@ export default interface TasksDAO {
   complete(tasks: ITaskProps): Promise<void>
   
   update(tasks: ITaskProps): Promise<void>
+
+  auth(user: IUser): Promise<IAuth>
+
+  signIn(user: IUser): Promise<IAuth>
+
+  logout(): Promise<void>
 }

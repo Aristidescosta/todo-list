@@ -7,5 +7,5 @@ export default interface TasksDAO {
 
   delete(taskID: string): Promise<void>;
 
-  complete(tasks: ITaskProps, id: string): Promise<void>
+  complete(tasks: ITaskProps): Promise<void>
 }

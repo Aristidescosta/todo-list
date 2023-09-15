@@ -11,8 +11,11 @@ import TasksDAO from "./TasksDAO";
 import { DB } from "../../firebase/firebaseConfig";
 
 export default class TasksDAODatabase implements TasksDAO {
-  async complete(tasks: ITaskProps, id: string): Promise<void> {
-    await updateDoc(doc(DB, "tasks", id), { ...tasks, isCompleted: !tasks.isCompleted});
+  async complete(tasks: ITaskProps): Promise<void> {
+    await updateDoc(doc(DB, "tasks", tasks.docId as string), {
+      ...tasks,
+      isCompleted: !tasks.isCompleted,
+    });
   }
 
   async save(tasks: ITaskProps): Promise<void> {

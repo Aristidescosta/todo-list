@@ -25,7 +25,7 @@ async function deleteTask(taskId: string): Promise<void> {
 }
 
 async function completeTask(task: ITaskProps): Promise<void> {
-  await TASKS_DAO.complete(task, task.docId as string)
+  await TASKS_DAO.complete(task)
     .then((response) => console.log(response))
     .catch((error) => console.log("Erro: " + error));
 }

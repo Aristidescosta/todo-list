@@ -49,14 +49,21 @@ export const HomeScreen = () => {
   );
 
   const handleDeleteTask = useCallback((id: string) => {
-    setIsLoading(true);
-    async function deleteTask() {
-      await TASK_REPOSITORY.deleteTask(id);
-      const TASKS = await TASK_REPOSITORY.getAllTasks();
-      setTasks(TASKS);
-      setIsLoading(false);
+    const TASK = tasks.filter((task) => task.docId === id);
+    if (
+      confirm(
+        `Deseja realmente apagar a tarefa '${TASK[0].title}'?`
+      )
+    ) {
+      setIsLoading(true);
+      async function deleteTask() {
+        await TASK_REPOSITORY.deleteTask(id);
+        const TASKS = await TASK_REPOSITORY.getAllTasks();
+        setTasks(TASKS);
+        setIsLoading(false);
+      }
+      deleteTask();
     }
-    deleteTask();
   }, []);
 
   const addTask = useCallback(
@@ -68,7 +75,9 @@ export const HomeScreen = () => {
         isCompleted: false,
       };
       TASK_REPOSITORY.createTask(newTask);
-      setTasks([...tasks, newTask]);
+      TASK_REPOSITORY.getAllTasks()
+        .then((respnse) => setTasks(respnse))
+        .catch((error) => alert(error));
     },
     [tasks]
   );

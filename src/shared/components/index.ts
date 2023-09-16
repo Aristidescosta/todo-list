@@ -1,7 +1,0 @@
-export * from "./ListTasks/index"
-export * from "./TaskModal/index"
-export * from "./ButtonAdd/index"
-export * from "./Preloader/index"
-export * from "./Header/index"
-export * from "./Search/index"
-export * from "./Task/index"

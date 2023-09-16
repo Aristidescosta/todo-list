@@ -70,6 +70,7 @@ export default class TasksDAODatabase implements TasksDAO {
       isCompleted: false,
       category: tasks.category,
       id: tasks.id,
+      imageUrl: tasks.imageUrl
     });
   }
 

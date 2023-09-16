@@ -104,19 +104,23 @@ export const HomeScreen = () => {
     [tasks]
   );
 
-  const addTask = useCallback((title: string, category: string) => {
-    const newTask = {
-      id: createId(),
-      title: title,
-      category: category,
-      isCompleted: false,
-    };
-    TASK_REPOSITORY.createTask(newTask).then(async () => {
-      TASK_REPOSITORY.getAllTasks()
-        .then((respnse) => setTasks(respnse))
-        .catch((error) => alert(error));
-    });
-  }, []);
+  const addTask = useCallback(
+    (title: string, category: string, imageUrl: string, file: File) => {
+      const newTask = {
+        id: createId(),
+        title: title,
+        category: category,
+        isCompleted: false,
+        imageUrl: imageUrl,
+      };
+      TASK_REPOSITORY.createTask(newTask, file).then(async () => {
+        TASK_REPOSITORY.getAllTasks()
+          .then((respnse) => setTasks(respnse))
+          .catch((error) => alert(error));
+      });
+    },
+    []
+  );
 
   return (
     <>

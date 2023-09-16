@@ -52,11 +52,13 @@ export const ListTasks: React.FC<ListHeaderProps> = ({
               id={task.id}
               isCompleted={task.isCompleted}
               title={task.title}
+              imageUrl={task.imageUrl}
               handleDeleteTask={() => handleDeleteTask(task.docId as string)}
               handleCompleteTask={() =>
                 handleCompleteTask(task.docId as string)
               }
               handleEditTask={() => handleEditTask(task.docId as string)}
+              
             />
           ))}
       </div>

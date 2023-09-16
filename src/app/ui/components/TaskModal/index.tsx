@@ -27,7 +27,10 @@ export const TaskModal: React.FC<TaskModal> = ({
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (!value || !category || !imageUrl) return;
+      if (!value || !category || !imageUrl) {
+        alert("Por favor, prencha todos os campos")
+        return
+      }
       if (image) handleAddTask(value, category, imageUrl, image);
       setCategory("");
       setValue("");

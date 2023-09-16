@@ -42,10 +42,20 @@ async function completeTask(task: ITaskProps): Promise<void> {
     .catch((error) => console.log("Erro: " + error));
 }
 
-async function updateTask(task: ITaskProps): Promise<void> {
-  await TASKS_DAO.update(task)
-    .then((response) => console.log(response))
-    .catch((error) => console.log("Erro: " + error));
+async function updateTask(task: ITaskProps, file?: File): Promise<void> {
+  if (file) {
+    const NEW_FILE = ref(storage, `tasks/image-${createId()}.png`);
+    await uploadBytes(NEW_FILE, file);
+    await getDownloadURL(NEW_FILE).then(async (response) => {
+      await TASKS_DAO.update({ ...task, imageUrl: response })
+        .then((response) => console.log(response))
+        .catch((error) => console.log("Erro: " + error));
+    });
+  } else {
+    await TASKS_DAO.update(task)
+      .then((response) => console.log(response))
+      .catch((error) => console.log("Erro: " + error));
+  }
 }
 
 async function login(email: string, password: string): Promise<IAuth | Error> {

@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { MdCloudUpload } from "react-icons/md";
 
 import { categories } from "../../../utils";
 import { ITaskProps } from "../../../models/types";
 
 interface TaskModal {
   handleCloseModal: () => void;
-  handleUpdateTask: (title: string, category: string) => void;
+  handleUpdateTask: (
+    title: string,
+    category: string,
+    imageUrl: string,
+    file?: File
+  ) => void;
   task: ITaskProps;
 }
 
@@ -14,18 +20,45 @@ export const TaskModalEdit: React.FC<TaskModal> = ({
   task,
   handleUpdateTask,
 }) => {
-  const [value, setValue] = useState("");
-  const [category, setCategory] = useState("");
+  const [value, setValue] = useState<string>();
+  const [category, setCategory] = useState<string>();
+  const [image, setImage] = useState<File>();
+  const [imageUrl, setImageUrl] = useState<string>();
+  const [imageName, setImageName] = useState("Sem nenhuma imagem selecionada");
+
+  useEffect(() => {
+    setCategory(task.category);
+    setImageUrl(task.imageUrl);
+    setValue(task.title);
+  }, [task.category, task.imageUrl, task.title]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(value, category)
-    if (!value || !category) return;
-    handleUpdateTask(value, category);
+    if (!value || !category || !imageUrl) {
+      alert("Por favor, prencha todos os campos");
+      return;
+    }
+    handleUpdateTask(value, category, imageUrl, image);
     setCategory("");
     setValue("");
     handleCloseModal();
   };
+
+  const handleSetImage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.currentTarget.files) {
+        const IMAGE = event.currentTarget.files[0];
+        setImageName(IMAGE.name);
+        setImage(IMAGE);
+        setImageUrl(URL.createObjectURL(IMAGE));
+      }
+    },
+    []
+  );
+
+  const handleClickInput = useCallback((element: HTMLElement | null) => {
+    if (element) element.click();
+  }, []);
 
   return (
     <div className="form-container">
@@ -39,6 +72,24 @@ export const TaskModalEdit: React.FC<TaskModal> = ({
             defaultValue={task.title}
           />
           <div className="select">
+            <div
+              className="select-image"
+              onClick={() => handleClickInput(document.querySelector(".input"))}
+            >
+              <input
+                type="file"
+                accept="image/*"
+                className="input"
+                onChange={handleSetImage}
+                hidden
+              />
+
+              {imageUrl ? (
+                <img src={imageUrl} alt={imageName} width={40} height={40} />
+              ) : (
+                <MdCloudUpload size={60} />
+              )}
+            </div>
             <select
               defaultValue={task.category}
               onChange={(e) => setCategory(e.target.value)}

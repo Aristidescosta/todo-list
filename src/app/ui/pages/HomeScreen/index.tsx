@@ -51,16 +51,17 @@ export const HomeScreen = () => {
   }
 
   const handleUpdateTask = useCallback(
-    (title: string, category: string) => {
+    (title: string, category: string, imageUrl: string, file?: File) => {
       setIsLoading(true);
       async function updateTask() {
         if (task)
-          await TASK_REPOSITORY.updateTask({ ...task, title, category }).then(
-            async () => {
-              const TASKS = await TASK_REPOSITORY.getAllTasks();
-              setTasks(TASKS);
-            }
-          );
+          await TASK_REPOSITORY.updateTask(
+            { ...task, title, category, imageUrl },
+            file
+          ).then(async () => {
+            const TASKS = await TASK_REPOSITORY.getAllTasks();
+            setTasks(TASKS);
+          });
 
         setIsLoading(false);
       }

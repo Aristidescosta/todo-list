@@ -61,6 +61,7 @@ export default class TasksDAODatabase implements TasksDAO {
       ...tasks,
       category: tasks.category,
       title: tasks.title,
+      imageUrl: tasks.imageUrl
     });
   }
 

@@ -13,6 +13,7 @@ export const Task: React.FC<TaskData> = ({
   category,
   isCompleted = false,
   title,
+  imageUrl,
   handleDeleteTask,
   handleCompleteTask,
   handleEditTask,
@@ -20,13 +21,21 @@ export const Task: React.FC<TaskData> = ({
   return (
     <div className="list-task">
       <div className="list-content">
-        <p
-          className="title"
-          style={{ textDecoration: isCompleted ? "line-through" : "" }}
-        >
-          {title}
-        </p>
-        <p>( {category} )</p>
+        <img
+          src={imageUrl}
+          width={60}
+          height={60}
+          alt=""
+        />
+        <div>
+          <p
+            className="title"
+            style={{ textDecoration: isCompleted ? "line-through" : "" }}
+          >
+            {title}
+          </p>
+          <p>( {category} )</p>
+        </div>
       </div>
       <div className="list-buttons">
         <button onClick={handleCompleteTask}>

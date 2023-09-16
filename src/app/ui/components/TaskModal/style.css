@@ -63,4 +63,22 @@ button {
 
 .select {
   width: 28vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 10px;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  padding: 10px;
+  font-size: 14px;
+  color: #1f1f35;
+  transition: 0.3s;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.select-image{
+  width: 30%;
 }

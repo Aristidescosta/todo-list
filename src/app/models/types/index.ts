@@ -4,6 +4,7 @@ export interface ITaskProps {
   id: string;
   isCompleted: boolean;
   docId?: string;
+  imageUrl: string
 }
 
 export type FilterProps = "all" | "completed" | "incomplete";
@@ -30,6 +31,11 @@ export interface IAuth {
 export interface IAuthError{
   errorCode: string;
   errorMessage: string
+}
+
+export type Photo = {
+  name: string;
+  url: string;
 }
 
 export declare interface DocumentData {}

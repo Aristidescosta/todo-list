@@ -1,11 +1,23 @@
+import { storage } from "../../firebase/firebaseConfig";
 import TasksDAODatabase from "../dao/TasksDAODatabase";
 import { IAuth, ITaskProps } from "../models/types";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
+import { v4 as createId } from "uuid";
 
 const TASKS_DAO = new TasksDAODatabase();
 
-async function createTask(tasks: ITaskProps): Promise<Error | string> {
+async function createTask(
+  tasks: ITaskProps,
+  file: File
+): Promise<Error | string> {
   try {
-    await TASKS_DAO.save(tasks);
+    const NEW_FILE = ref(storage, `tasks/image-${createId()}.png`);
+    await uploadBytes(NEW_FILE, file);
+    await getDownloadURL(NEW_FILE)
+      .then(async (response) => {
+        await TASKS_DAO.save({ ...tasks, imageUrl: response });
+      })
+      .catch((err) => console.log(err));
     return `Tarefa "salva" com sucesso`;
   } catch (error) {
     return new Error("Erro ao salvar esta tarefa!");

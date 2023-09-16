@@ -12,6 +12,7 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
   const [userPassword, setUserPassword] = useState("");
   const [isSignIn, setIsSignIn] = useState(false);
   const { isAuthenticated, login, logUp } = useAuthContext();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (
     email: string,
@@ -27,8 +28,10 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
     password: string,
     e: React.FormEvent<HTMLFormElement>
   ) => {
+    setIsLoading(true);
     e.preventDefault();
     await login(email, password);
+    setIsLoading(false);
   };
 
   if (!isAuthenticated) return <>{children}</>;
@@ -63,7 +66,16 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
             />
           </div>
 
-          <button type="submit">Entrar</button>
+          {isLoading ? (
+            <button
+              type="button"
+              style={{ opacity: 0.6, cursor: "not-allowed" }}
+            >
+              Entrando...
+            </button>
+          ) : (
+            <button type="submit">Entrar</button>
+          )}
 
           <p>
             {!isSignIn ? "Ainda não tem uma conta?" : "Já tens uma conta?"}

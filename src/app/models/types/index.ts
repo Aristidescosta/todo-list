@@ -9,3 +9,12 @@ export interface IAuth {
     name: string;
   };
 }
+
+export interface ITask{
+  title: string;
+  category: string;
+  docId?: string;
+  completed: boolean;
+  imageUrl: string;
+  date: string;
+}

@@ -1,20 +1,43 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, Typography, useTheme, Grid } from "@mui/material";
 import { CardContainer, ModalComponent } from "..";
 import { ITask } from "../../../models/types";
+import { ModalDelete } from "../ModalDelete";
 
 export const TodoList: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [tasks, setTasks] = useState<ITask[]>([]);
+  const [task, setTask] = useState<ITask>();
+  const [isCreateTask, setIsCreateTask] = useState(true);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setIsCreateTask(true);
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
+  const handleDelete = () => setOpenEdit(true);
+  const handleCloseEdit = () => setOpenEdit(false);
+  const handleUpdateTask = useCallback(
+    (title: string) => {
+      const TASK = tasks.filter((taskFiltered) => taskFiltered.title === title);
+      console.log(title);
+      if (TASK) setTask(TASK[0]);
+      setOpen(true);
+      setIsCreateTask(false);
+    },
+    [tasks]
+  );
 
   const theme = useTheme();
+  console.log(task);
 
-  const save = (task: ITask) => {
-    localStorage.setItem("tasks", JSON.stringify([...tasks, task]));
+  const save = (task: ITask, file: File) => {
+    localStorage.setItem(
+      "tasks",
+      JSON.stringify([{ ...tasks, file: file }, task])
+    );
     setTasks([...tasks, task]);
   };
 
@@ -41,25 +64,33 @@ export const TodoList: React.FC = () => {
           Criar lista
         </Button>
       </Box>
-      <Grid container item direction="row">
+      <Grid container item direction="row" mt={2}>
         {tasks.map((task) => (
           <CardContainer
-            key={task.docId}
+            key={tasks.length + 1}
             category={task.category}
             completed={task.completed}
             date={task.date}
             imageUrl={task.imageUrl}
             title={task.title}
+            description={task.description}
+            handleUpdateTask={handleUpdateTask}
+            onDelete={handleDelete}
           />
         ))}
       </Grid>
       <ModalComponent
         handleClose={handleClose}
         open={open}
-        isCreateTask
+        isCreateTask={isCreateTask}
         isLoading={isLoading}
         setIsLoading={setIsLoading}
         save={save}
+        task={task}
+      />
+      <ModalDelete
+        handleClose={handleCloseEdit}
+        open={openEdit}
       />
     </>
   );

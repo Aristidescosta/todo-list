@@ -26,7 +26,7 @@ interface IModalComponentProps {
   task?: ITask;
   isLoading: boolean;
   setIsLoading: (oldLoading: boolean) => void;
-  save: (tasks: ITask) => void
+  save: (tasks: ITask, file: File) => void;
 }
 
 const formValidationSchema: yup.Schema<ITask> = yup.object().shape({
@@ -35,7 +35,8 @@ const formValidationSchema: yup.Schema<ITask> = yup.object().shape({
   docId: yup.string(),
   completed: yup.boolean().required(),
   imageUrl: yup.string().required(),
-  date: yup.string().required()
+  date: yup.string().required(),
+  description: yup.string().required().min(10).max(120),
 });
 
 export const ModalComponent: React.FC<IModalComponentProps> = ({
@@ -45,7 +46,7 @@ export const ModalComponent: React.FC<IModalComponentProps> = ({
   isLoading,
   handleClose,
   setIsLoading,
-  save
+  save,
 }) => {
   const [image, setImage] = useState("");
   const [picture, setPicture] = useState<File>();
@@ -53,14 +54,17 @@ export const ModalComponent: React.FC<IModalComponentProps> = ({
   const { formRef } = useVForm();
 
   useEffect(() => {
+    console.log(isCreateTask);
     if (!isCreateTask) {
       setIsLoading(false);
       formRef.current?.setData({
-        title: "Nova tarefa",
-        category: "Trabalho",
-        docId: "string",
-        completed: false,
-        imageUrl: "fasjfaslfjaslfj",
+        title: task?.title,
+        category: task?.category,
+        docId: task?.docId,
+        completed: task?.completed,
+        imageUrl: task?.imageUrl,
+        date: task?.date,
+        description: task?.description,
       });
     } else {
       formRef.current?.setData({
@@ -69,9 +73,22 @@ export const ModalComponent: React.FC<IModalComponentProps> = ({
         docId: "",
         completed: false,
         imageUrl: "",
+        date: "",
+        description: "",
       });
     }
-  }, [formRef, isCreateTask, setIsLoading]);
+  }, [
+    formRef,
+    isCreateTask,
+    setIsLoading,
+    task?.category,
+    task?.completed,
+    task?.date,
+    task?.description,
+    task?.docId,
+    task?.imageUrl,
+    task?.title,
+  ]);
 
   const handleSave = (data: ITask) => {
     setIsLoading(true);
@@ -92,8 +109,9 @@ export const ModalComponent: React.FC<IModalComponentProps> = ({
           completed: validatedData.completed,
           imageUrl: validatedData.imageUrl,
           date: validatedData.date,
+          description: validatedData.description,
         };
-        save(TASK)
+        if (picture) save(TASK, picture);
         setIsLoading(false);
         handleClose();
       })
@@ -163,6 +181,7 @@ export const ModalComponent: React.FC<IModalComponentProps> = ({
                         name="title"
                         disabled={isLoading}
                         label="Nome da tarefa"
+                        defaultValue={isCreateTask ? task?.title : ""}
                         /* onChange={(e) => setPeopleName(e.target.value)} */
                       />
                     </Grid>
@@ -175,6 +194,19 @@ export const ModalComponent: React.FC<IModalComponentProps> = ({
                         name="category"
                         disabled={isLoading}
                         label="Categoria"
+                        defaultValue={isCreateTask ? task?.category : ""}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid container item direction="row">
+                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                      <VTextFields
+                        fullWidth
+                        name="description"
+                        disabled={isLoading}
+                        label="Descrição"
+                        defaultValue={isCreateTask ? task?.description : ""}
                       />
                     </Grid>
                   </Grid>
@@ -202,7 +234,7 @@ export const ModalComponent: React.FC<IModalComponentProps> = ({
 
                       {image ? (
                         <img
-                          src={image}
+                          src={task?.imageUrl ? task.imageUrl : image}
                           alt={"imageName"}
                           width={40}
                           height={40}

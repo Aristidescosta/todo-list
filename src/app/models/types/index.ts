@@ -17,4 +17,5 @@ export interface ITask{
   completed: boolean;
   imageUrl: string;
   date: string;
+  description: string;
 }

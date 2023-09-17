@@ -18,6 +18,7 @@ import {
 import { IVFormErrors, VForm, VTextFields, useVForm } from "../../../forms";
 import { ITask } from "../../../models/types";
 import { style } from "./style";
+import { TASK_REPOSITORY } from "../../../repository/TaskRepository";
 
 interface IModalComponentProps {
   open: boolean;
@@ -111,7 +112,10 @@ export const ModalComponent: React.FC<IModalComponentProps> = ({
           date: validatedData.date,
           description: validatedData.description,
         };
-        if (picture) save(TASK, picture);
+        if (picture)
+          TASK_REPOSITORY.createTask(TASK, picture)
+            .then((response) => alert(response))
+            .catch((error) => alert(error));
         setIsLoading(false);
         handleClose();
       })

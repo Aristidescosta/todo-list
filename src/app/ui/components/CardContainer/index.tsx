@@ -29,7 +29,7 @@ export const CardContainer: React.FC<CardContainerProps> = ({
   onDelete,
 }) => {
   return (
-    <Grid item xs={12} sm={8} md={6} lg={4} xl={2}>
+    <Grid item xs={12} sm={8} md={6} lg={4} xl={2} ml={6} mt={2}>
       <Card sx={{ maxWidth: 345 }}>
         <CardHeader
           avatar={
@@ -55,7 +55,10 @@ export const CardContainer: React.FC<CardContainerProps> = ({
           <IconButton aria-label="Delete task" onClick={onDelete}>
             <Delete />
           </IconButton>
-          <IconButton aria-label="atualiza a tarefa" onClick={() => handleUpdateTask(title)}>
+          <IconButton
+            aria-label="atualiza a tarefa"
+            onClick={() => handleUpdateTask(title)}
+          >
             <Update />
           </IconButton>
         </CardActions>

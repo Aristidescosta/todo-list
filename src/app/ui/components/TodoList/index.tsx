@@ -3,6 +3,7 @@ import { Box, Button, Typography, useTheme, Grid } from "@mui/material";
 import { CardContainer, ModalComponent } from "..";
 import { ITask } from "../../../models/types";
 import { ModalDelete } from "../ModalDelete";
+import { TASK_REPOSITORY } from "../../../repository/TaskRepository";
 
 export const TodoList: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -42,10 +43,19 @@ export const TodoList: React.FC = () => {
   };
 
   useEffect(() => {
-    const TASKS_FINDED = localStorage.getItem("tasks");
-    if (TASKS_FINDED) {
-      setTasks(JSON.parse(TASKS_FINDED));
-    }
+    const getAll = async () => {
+      await TASK_REPOSITORY.getAll()
+        .then((response) => {
+          if (response instanceof Error) {
+            alert(response.message);
+            return;
+          }
+          setTasks(response);
+        })
+        .catch((error) => alert(error));
+    };
+
+    getAll();
   }, []);
 
   return (
@@ -88,10 +98,7 @@ export const TodoList: React.FC = () => {
         save={save}
         task={task}
       />
-      <ModalDelete
-        handleClose={handleCloseEdit}
-        open={openEdit}
-      />
+      <ModalDelete handleClose={handleCloseEdit} open={openEdit} />
     </>
   );
 };

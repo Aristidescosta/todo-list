@@ -6,7 +6,8 @@ export interface IUser {
 export interface IAuth {
   accessToken: string;
   user: {
-    name: string;
+    name: string | null;
+    photoUrl: string | null;
   };
 }
 

@@ -13,7 +13,7 @@ export default interface TasksDAO {
 
   auth(user: IUser): Promise<IAuth>
 
-  signIn(user: IUser): Promise<IAuth>
+  signIn(): Promise<void | IAuth>
 
   logout(): Promise<void>
 }

@@ -77,17 +77,15 @@ async function login(email: string, password: string): Promise<IAuth | Error> {
   }
 }
 
-async function sigIn(email: string, password: string): Promise<IAuth | Error> {
-  try {
-    const ACCESS_TOKEN = await TASKS_DAO.signIn({ email, password });
-    if (ACCESS_TOKEN instanceof Error) return new Error("Erro");
-    return ACCESS_TOKEN;
-  } catch (error) {
-    const ERROR = (error as { message: string }).message;
-    if (ERROR.includes("auth/invalid-login-credentials"))
-      return new Error("Email ou senha incorreta");
-    return new Error(ERROR || "Houve um erro interno");
-  }
+async function sigIn(): Promise<IAuth | Error | void> {
+  await TASKS_DAO.signIn()
+    .then((user) => {
+      return user;
+    })
+    .catch((error) => {
+      const ERROR = (error as { message: string }).message;
+      return new Error(ERROR || "Houve um erro interno");
+    });
 }
 
 async function logout(): Promise<Error | void> {
@@ -95,6 +93,7 @@ async function logout(): Promise<Error | void> {
     return new Error("Houve um erro interno");
   });
 }
+
 
 export const TASK_REPOSITORY = {
   createTask,

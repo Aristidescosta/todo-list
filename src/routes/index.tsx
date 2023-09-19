@@ -1,11 +1,21 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import { HomeScreen } from "../app/ui/pages/HomeScreen";
+import { Route, Routes } from "react-router-dom";
+
+import { Home } from "../app/ui/pages";
+import { RequireAuth } from "../app/Auth/RequireAuth";
 
 export const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="*" element={<Navigate to="/pagina-inicial" />} />
-      <Route path="/pagina-inicial" element={<HomeScreen />} />
+      <Route
+        index
+        path="/"
+        element={
+          <RequireAuth>
+            <Home />
+          </RequireAuth>
+        }
+      />
+      <Route path="/signup" element={<Home />} />
     </Routes>
   );
 };

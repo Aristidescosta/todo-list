@@ -1,82 +1,74 @@
-import {
-  createContext,
-  useCallback,
-  useMemo,
-  useState,
-  useEffect,
-  useContext,
-} from "react";
+import { useToast } from "@chakra-ui/react";
+import { createContext, useState, useContext, useEffect } from "react";
+
 import { TASK_REPOSITORY } from "../repository/TasksRepository";
+import { IAuth} from "../models/types";
 
 interface IAuthContextProps {
   children: React.ReactNode;
 }
 
 interface IAuthContextData {
-  isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<string | undefined>;
-  logout: () => void;
-  logUp: (email: string, password: string) => Promise<string | undefined>;
+  user: IAuth | null;
+  signin: (email: string, password: string) => Promise<boolean>;
+  signout: () => void;
 }
 
 const AuthContext = createContext({} as IAuthContextData);
 
-const LOCAL_STORAGE_KEY_ACCESS_TOKEN = "APP_ACCESS_TOKEN";
+const APP_STORAGE_NAME = "APP_ACCESS_TOKEN"
 
 export const AuthProvider: React.FC<IAuthContextProps> = ({ children }) => {
-  const [accessToken, setAccessToken] = useState<string>();
+  const [user, setUser] = useState<IAuth | null>(null);
+  const TOAST = useToast();
 
-  useEffect(() => {
-    const ACCESS_TOKEN = localStorage.getItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN);
-    if (ACCESS_TOKEN) setAccessToken(JSON.parse(ACCESS_TOKEN));
-    else setAccessToken(undefined);
-  }, []);
-
-  const handleLogin = useCallback(async (email: string, password: string) => {
-    const result = await TASK_REPOSITORY.sigIn(email, password);
-    if (result instanceof Error) {
-      alert(result.message);
-      return result.message;
-    } else {
-      localStorage.setItem(
-        LOCAL_STORAGE_KEY_ACCESS_TOKEN,
-        JSON.stringify(result.accessToken)
-      );
-      setAccessToken(result.accessToken);
+  useEffect(()=>{
+    const validateToken = async () =>{
+      const STORAGE_DATA = localStorage.getItem(APP_STORAGE_NAME);
+      if(STORAGE_DATA)
+      setUser(JSON.parse(STORAGE_DATA))
     }
-  }, []);
+    validateToken()
+  }, [])
 
-  const handleLogUp = useCallback(async (email: string, password: string) => {
-    const result = await TASK_REPOSITORY.login(email, password);
-    if (result instanceof Error) {
-      alert(result.message);
-      return result.message;
-    } else {
-      localStorage.setItem(
-        LOCAL_STORAGE_KEY_ACCESS_TOKEN,
-        JSON.stringify(result.accessToken)
-      );
-      setAccessToken(result.accessToken);
+  async function signin(email: string, password: string) {
+    const DATA = await TASK_REPOSITORY.sigIn(email, password);
+    if (DATA instanceof Error) {
+      TOAST({
+        title: DATA.message,
+        status: "error",
+        duration: 2000,
+        position: "top-right",
+        isClosable: true,
+      });
+      return false;
     }
-  }, []);
+    console.log(DATA)
+    setToken(DATA)
+    setUser(DATA);
+    return true;
+  }
 
-  const IS_AUTHENTICATED = useMemo(() => !accessToken, [accessToken]);
+  async function signout() {
+    await TASK_REPOSITORY.logout();
+    removeToken()
+    setUser(null);
+  }
 
-  const handleLogout = useCallback(async () => {
-    const RESULT = await TASK_REPOSITORY.logout();
-    setAccessToken(undefined);
-    localStorage.removeItem(LOCAL_STORAGE_KEY_ACCESS_TOKEN);
-    if (RESULT instanceof Error) return RESULT.message;
-    return;
-  }, []);
+  function setToken(user: IAuth) {
+    localStorage.setItem(APP_STORAGE_NAME, JSON.stringify(user))
+  }
+
+  function removeToken() {
+    localStorage.removeItem(APP_STORAGE_NAME);
+  }
 
   return (
     <AuthContext.Provider
       value={{
-        isAuthenticated: IS_AUTHENTICATED,
-        login: handleLogin,
-        logout: handleLogout,
-        logUp: handleLogUp,
+        signin: signin,
+        signout: signout,
+        user: user,
       }}
     >
       {children}

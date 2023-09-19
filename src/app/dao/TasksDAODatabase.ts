@@ -8,13 +8,19 @@ import {
 } from "firebase/firestore/lite";
 import {
   getAuth,
-  signInWithEmailAndPassword,
   signOut,
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  setPersistence,
+  inMemoryPersistence,
+  signInWithRedirect,
+  signInWithPopup,
 } from "firebase/auth";
 import { IAuth, ITaskProps, IUser } from "../models/types";
 import TasksDAO from "./TasksDAO";
 import { DB } from "../../firebase/firebaseConfig";
+
+const PROVIDER = new GoogleAuthProvider();
 
 export default class TasksDAODatabase implements TasksDAO {
   async auth(user: IUser): Promise<IAuth> {
@@ -24,9 +30,11 @@ export default class TasksDAODatabase implements TasksDAO {
       user.email,
       user.password
     );
-    console.log("Erro");
     const IUSER = {
-      accessToken: USER.user.uid,
+      accessToken: await USER.user.getIdToken(true),
+      displayName: USER.user.displayName,
+      email: USER.user.email,
+      photoURL: USER.user.photoURL,
     };
     return IUSER;
   }
@@ -35,18 +43,19 @@ export default class TasksDAODatabase implements TasksDAO {
     await signOut(AUTH);
   }
 
-  async signIn(user: IUser): Promise<IAuth> {
+  async signIn(): Promise<void | IAuth> {
     const AUTH = getAuth();
-    const USER = await signInWithEmailAndPassword(
-      AUTH,
-      user.email,
-      user.password
-    );
-    console.log("Erro");
-    const IUSER = {
-      accessToken: USER.user.uid,
-    };
-    return IUSER;
+    setPersistence(AUTH, inMemoryPersistence).then(async() => {
+      const USER = await signInWithPopup(AUTH, PROVIDER);
+      const IUSER = {
+        accessToken: await USER.user.getIdToken(true),
+        displayName: USER.user.displayName,
+        email: USER.user.email,
+        photoURL: USER.user.photoURL,
+      };
+
+      return IUSER
+    });
   }
 
   async complete(tasks: ITaskProps): Promise<void> {
@@ -61,7 +70,7 @@ export default class TasksDAODatabase implements TasksDAO {
       ...tasks,
       category: tasks.category,
       title: tasks.title,
-      imageUrl: tasks.imageUrl
+      imageUrl: tasks.imageUrl,
     });
   }
 
@@ -71,7 +80,7 @@ export default class TasksDAODatabase implements TasksDAO {
       isCompleted: false,
       category: tasks.category,
       id: tasks.id,
-      imageUrl: tasks.imageUrl
+      imageUrl: tasks.imageUrl,
     });
   }
 
